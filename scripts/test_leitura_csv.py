@@ -1,6 +1,6 @@
 import pandas as pd
 
-caminho_csv = "data/dados_cripto_teste.csv"
+caminho_csv = "data/dados_btc_mensal.csv"
 
 try:
     df = pd.read_csv(caminho_csv, sep=";")
