@@ -2,9 +2,9 @@ import pandas as pd
 import numpy as np
 import os
 
-caminho_csv = "data/dados_btc_mensal.csv"
+input_path = "data/dados_btc_mensal_real.csv"
 
-df = pd.read_csv(caminho_csv, sep=";")
+df = pd.read_csv(input_path)
 df["preco_usd"] = df["preco_usd"].astype(str).str.replace(",",".").astype(float) # ajusta o separador da planilha , para .
 
 print("Colunas detectadas:", list(df.columns))

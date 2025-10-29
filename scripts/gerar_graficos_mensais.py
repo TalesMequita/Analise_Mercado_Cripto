@@ -14,7 +14,7 @@ df = pd.read_csv(input_path, sep=";") # indicando para seprar na ;
 print("Colunas detectadas", df.columns.tolist())
 print("\nPrimeiras Linhas:\n", df.head())
 
-df = df.sort_values(by=["ano", "mes"])   # garantindo que os meses erstão certos
+df = df.sort_values(by=["ano", "mes"])   # garantindo que os meses estão certos
 
 # Grafico 1 abaixo
 plt.figure(figsize=(12, 6))

@@ -1,10 +1,10 @@
 ----- RELATÓRIO 2 - ANALISE MENSAL BTC -----
 
 Estatísticas Gerais:
-Média Geral: 7,122.94 USD
-Desvio Padrão: 4,782.10 USD
-Maior Preço: 19,869.85 USD
-Menor Preço: 2,570.27 USD
+Média Geral: 22,890.18 USD
+Desvio Padrão: 30,086.48 USD
+Maior Preço: 115,082.60 USD
+Menor Preço: 89.98 USD
 
 Arquivos gerados
  - Gráfico de Tendência: outputs/grafico_tendencia_btc.png
