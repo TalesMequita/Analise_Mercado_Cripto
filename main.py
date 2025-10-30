@@ -1,5 +1,7 @@
 
 
-import pandas as pd
-df = pd.read_csv("data/dados_btc_mensal_real.csv")
-print(df.columns)
+try:
+    from sklearn.model_selection import train_test_split
+    print("scikit-learn está instalda com sucesso")
+except ImportError:
+    print("scikit-learn não está instalada.")
