@@ -3,8 +3,8 @@
 # 🚀 Projeto — Nome do Projeto
 
 ## 👥 Integrantes
-- **Matheus Dias da Silva** — RA: 2222200299  
-- **Tales Mequita Fernandes** — RA: 2222200154
+- **Matheus Dias da Silva** — RA:2222200299
+- **Tales Mequita Fernandes** — RA:2222201254
 
 ## 📚 Descrição
 
