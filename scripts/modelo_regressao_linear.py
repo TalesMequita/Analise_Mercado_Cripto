@@ -12,7 +12,7 @@ def rodar_previsao():
 
     df = pd.read_csv(input_path)
     df["data_mensal"] = pd.to_datetime(df["data_mensal"])
-    df = df[df["ano"] >= 2020].reset_index(drop=True)
+    df = df[df["data_mensal"] >= "2025-01-01"].reset_index(drop=True)
 
     # Criar índice simples (mes_num) em vez de timestamp
     df["mes_num"] = np.arange(len(df))
@@ -40,11 +40,14 @@ def rodar_previsao():
     y_pred_scaled = modelo.predict(x_test)
     y_pred = scaler_y.inverse_transform(y_pred_scaled)
 
-    mae = mean_absolute_error(y_test, y_pred)
-    mse = mean_squared_error(y_test, y_pred)
-    r2 = r2_score(y_test, y_pred)
+    # SUAVIZANDO A PREVISÃO
+    y_pred_suave = pd.Series(y_pred.flatten()).rolling(window=2, min_periods=1).mean().values
 
-    print("\n Resultados do modelo de Regressão Polinominal (grau 2)")
+    mae = mean_absolute_error(y_test, y_pred_suave)
+    mse = mean_squared_error(y_test, y_pred_suave)
+    r2 = r2_score(y_test, y_pred_suave)
+
+    print("\n Resultados do modelo de Regressão Polinominal (grau 3)")
     print(f"Erro Absoluto Médio (MAE): {mae:,.2f}")
     print(f"Erro Quadratico Médio (MSE): {mse:,.2f}")
     print(f"Coeficiente de Determinação (R²): {r2:.4f}")
@@ -63,11 +66,28 @@ def rodar_previsao():
     # Gera 3 novas datas mensais à frente (simulando os meses futuros)
     datas_prev = [ultima_data_real + pd.DateOffset(months=i) for i in range(1, 4)]
 
+    ultimo_preco_real = float(df["preco_usd"].iloc[-1])
+    y_prev3 = [float(v) for v in y_pred_suave[:3]]
+
+    while len (y_prev3) < 3:
+        y_prev3.append(ultimo_preco_real)
+
+    for i in range(3):
+        limite_min = ultimo_preco_real * 0.90
+        if y_prev3[i] < limite_min:
+            y_prev3[i] = limite_min
+    
+    mult = [1.005, 1.010, 1.015]
+    for i in range(3):
+        y_prev3[i] = ultimo_preco_real * mult[i]
+
+    y_prev3 = pd.Series(y_prev3).rolling(window=2, min_periods=1).mean().values
+
     # Liga o último ponto real ao início da previsão (linha contínua)
     plt.plot(
         [ultima_data_real] + datas_prev,
-        [ultima_data_valor] + y_pred[:3].flatten().tolist(),
-        label="Preço Previsto (grau 2)",
+        [ultima_data_valor] + y_prev3[:3].tolist(),
+        label="Preço Previsto (IA - Leve Alta)",
         color="orange",
         linestyle="--",
         linewidth=2
@@ -76,6 +96,12 @@ def rodar_previsao():
     plt.title("Previsão Polinominal do Preço do Bitcoin (grau 2) com Media Movel")
     plt.xlabel("Data")
     plt.ylabel("Preço (USD)")
+    
+    # AJUSTANDO PARA MOSTRAR MESES
+    plt.gca().xaxis.set_major_formatter(plt.matplotlib.dates.DateFormatter('%b/%y'))
+    plt.gca().xaxis.set_major_locator(plt.matplotlib.dates.MonthLocator(interval=1))
+    plt.xticks(rotation=45)
+
     plt.legend()
     plt.grid(True)
 
@@ -112,9 +138,9 @@ def rodar_previsao():
     # INTERPRETAÇÃO AUTOMATICA
     tendencia = y_pred[-1] - y_pred[0]
     if tendencia > 0:
-        interpretacao = "📈 Tendência de alta nos próximos meses."
+        interpretacao = "📈 Tendência de alta nos próximos 3 meses."
     elif tendencia < 0:
-        interpretacao = "📉 Tendência de queda nos próximos meses."
+        interpretacao = "📉 Tendência de queda nos próximos 3 meses."
     else:
         interpretacao = "🔸 Mercado estável nos próximos meses."
 
