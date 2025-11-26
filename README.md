@@ -90,7 +90,7 @@ Interpretação automática indicando tendência (Alta, Queda ou Estabilidade).
 #### 🔁 Observação importante
 Antes de rodar qualquer comando, entre na pasta principal do projeto:
 
-- cd Analise_Mercado
+- cd Analise_Mercado_Cripto
 
 Depois disso, siga os passos normalmente:
 
